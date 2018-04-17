@@ -17,6 +17,9 @@ public class Controller implements Initializable {
     private TextArea assemblyText;
 
     @FXML
+    private TextField startingAddress;
+
+    @FXML
     private Button startButton;
 
     @FXML
@@ -31,7 +34,8 @@ public class Controller implements Initializable {
     public void assembleProgram() throws IOException {
         String assembly;
         assembly = assemblyText.getText();
-        Assembler.Assemble(assembly);
+        int startAddress = Integer.parseInt(startingAddress.getText());
+        Assembler.Assemble(assembly,startAddress);
     }
 
     @Override

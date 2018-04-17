@@ -38,7 +38,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextField layoutX="14.0" layoutY="46.0" prefHeight="25.0" prefWidth="233.0" promptText="Starting Memory Address" />
+      <TextField fx:id="startingAdress" layoutX="14.0" layoutY="46.0" prefHeight="25.0" prefWidth="233.0" promptText="Starting Memory Address" />
       <Button fx:id="startButton" layoutX="355.0" layoutY="46.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="65.0" text="Start" />
       <Button fx:id="assembleButton" layoutX="263.0" layoutY="46.0" mnemonicParsing="false" onAction="#assembleProgram" prefHeight="25.0" prefWidth="81.0" text="Assemble" />
    </children>
