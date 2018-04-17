@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="794.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="794.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Mips.Controller">
    <children>
       <TextArea fx:id="assemblyText" layoutX="14.0" layoutY="103.0" prefHeight="661.0" prefWidth="406.0" />
       <MenuBar layoutY="2.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="1180.0">
@@ -38,7 +38,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextField layoutX="14.0" layoutY="46.0" prefHeight="25.0" prefWidth="233.0" promptText="Starting Memory Address" />
+      <TextField fx:id="startingAddress" layoutX="14.0" layoutY="46.0" prefHeight="25.0" prefWidth="233.0" promptText="Starting Memory Address" />
       <Button fx:id="startButton" layoutX="355.0" layoutY="46.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="25.0" prefWidth="65.0" text="Start" />
       <Button fx:id="assembleButton" layoutX="263.0" layoutY="46.0" mnemonicParsing="false" onAction="#assembleProgram" prefHeight="25.0" prefWidth="81.0" text="Assemble" />
    </children>
