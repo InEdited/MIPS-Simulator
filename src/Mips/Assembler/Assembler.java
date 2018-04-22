@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.*;
 
 import Mips.Controller;
+import Mips.Processor.InstructionMemory;
 import Mips.Utils.*;
 
 public class Assembler {
@@ -31,19 +32,26 @@ public class Assembler {
             for (String thing: splittedCode){
                 System.out.println(thing);
             }
-            for(Map.Entry entry:rInstructions.entrySet()){
-                if(entry.getKey().equals(splittedCode[0]))
+            for(Map.Entry entry:rInstructions.entrySet()) {
+                if (entry.getKey().equals(splittedCode[0])){
                     System.out.println(assembleTypeR(splittedCode));
+                    InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode));
+                    //System.out.println(InstructionMemory.getInstructionAt(currentAddress));
+                }
             }
             for(Map.Entry entry:iInstructions.entrySet()){
-                if(entry.getKey().equals(splittedCode[0]))
+                if(entry.getKey().equals(splittedCode[0])) {
                     System.out.println(assembleTypeI(splittedCode));
+                    InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode));
+                }
             }
             for(Map.Entry entry:jInstructions.entrySet()){
-                if(entry.getKey().equals(splittedCode[0]))
-                    System.out.println(weScrewedBoiJump(splittedCode,codeUpdated,currentAddress));
+                if(entry.getKey().equals(splittedCode[0])) {
+                    System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, currentAddress));
+                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, currentAddress));
+                }
             }
-                        currentAddress++;
+            currentAddress += 4;
         }
     }
 

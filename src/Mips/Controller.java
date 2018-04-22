@@ -1,5 +1,10 @@
 package Mips;
 
+import Mips.Processor.PC;
+import Mips.Processor.Processor;
+import Mips.Processor.Register;
+import Mips.Processor.RegisterFile;
+import Mips.Utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,9 +14,12 @@ import Mips.Assembler.Assembler;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    private Processor processor;
 
     @FXML
     private TextArea assemblyText;
@@ -27,7 +35,11 @@ public class Controller implements Initializable {
 
     @FXML
     public void startProgram(){
-
+        processor = new Processor();
+        PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
+        //System.out.println(Utils.to32BitBinary(2));
+        processor.singleCycle();
+        //processor.registerFile.printRegisters();
     }
 
     @FXML
@@ -42,10 +54,11 @@ public class Controller implements Initializable {
         Assembler.Assemble(assembly, Integer.parseInt(startAddress));
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting the Program");
-
+        //processor = new Processor();
     }
 
 

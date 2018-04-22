@@ -1,6 +1,8 @@
 package Mips.Processor;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Register {
@@ -10,8 +12,12 @@ public class Register {
 
 
     public Register(String name,String code){
+        this.name = new SimpleStringProperty();
         this.name.set(name);
+        this.code = new SimpleIntegerProperty();
         this.code.set(Integer.parseInt(code));
+        value = new SimpleStringProperty();
+        this.value.set("00000000000000000000000000000000");
     }
 
 
@@ -55,6 +61,10 @@ public class Register {
 
     public IntegerProperty codeProperty() {
         return code;
+    }
+
+    public void printReg(){
+        System.out.println("Register " + this.name + ": " + this.value);
     }
 
 }

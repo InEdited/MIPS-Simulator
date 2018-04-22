@@ -1,9 +1,12 @@
 package Mips.Processor;
 
 public class RegisterFile {
-    private static Register[] registers;
+    private static Register[] registers = new Register[32];
 
-    public static void initRegisters(){
+    private Processor processor;
+
+    public RegisterFile(Processor processor){
+        this.processor = processor;
         registers[0] = new Register("$zero","00000");
         //registers[1] = new Register("$0","00000");
         registers[1] = new Register("$at","00001");
@@ -39,11 +42,19 @@ public class RegisterFile {
         registers[31] = new Register("$ra","11111");
     }
 
-    public static String readRegister(String code){
+    public String readRegister(String code){
+        System.out.println("Reading register : " + registers[Integer.parseInt(code,2)] + " Value : " + registers[Integer.parseInt(code,2)].getValue() );
         return registers[Integer.parseInt(code,2)].getValue();
     }
 
-    public static void writeRegister(String code, String value){
-        registers[Integer.parseInt(code,2)].setValue(value);
+    public void writeRegister(String code, String value){
+        if(processor.controlUnit.isRegWrite())
+            registers[Integer.parseInt(code,2)].setValue(value);
+    }
+
+    public void printRegisters() {
+        for (int i = 0; i <32 ; i++) {
+            registers[i].printReg();
+        }
     }
 }
