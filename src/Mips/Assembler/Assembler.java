@@ -22,12 +22,17 @@ public class Assembler {
 
     public static void Assemble(String code,int currentAddress) throws IOException {
         initMaps();
-        System.out.println(code);
-        String codeUpdated = code.replaceAll(","," ").replaceAll("[()]", " ");
+        int baseAddress = currentAddress;
+        //System.out.println(code);
+        String codeUpdated = code.replaceAll(","," ")
+                .replaceAll("[()]", " ")
+                .replaceAll(":","\n")
+                .replaceAll("\n+","\n");
+        System.out.println(codeUpdated);
         BufferedReader bufReader = new BufferedReader(new StringReader(codeUpdated));
         String codeLine = null;
         while((codeLine=bufReader.readLine())!=null){
-            String[] splittedCode = codeLine.split("\\s+");
+            String[] splittedCode = codeLine.trim().split("\\s+");
             for (String thing: splittedCode){
                 System.out.println(thing);
             }
@@ -36,21 +41,24 @@ public class Assembler {
                     System.out.println(assembleTypeR(splittedCode));
                     InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode));
                     //System.out.println(InstructionMemory.getInstructionAt(currentAddress));
+                    currentAddress += 4;
                 }
             }
             for(Map.Entry entry:iInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
                     System.out.println(assembleTypeI(splittedCode));
                     InstructionMemory.setInstruction(currentAddress, assembleTypeI(splittedCode));
+                    currentAddress += 4;
                 }
             }
             for(Map.Entry entry:jInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
-                    System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, currentAddress));
-                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, currentAddress));
+                    System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, baseAddress));
+                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, baseAddress));
+                    currentAddress += 4;
+
                 }
             }
-            currentAddress += 4;
         }
     }
 
@@ -61,14 +69,17 @@ public class Assembler {
             int lineNum = 0;
             String readerNextLine = null;
             while ((readerNextLine=bufferedReader.readLine())!=null){
-                lineNum++;
-                if (readerNextLine.contains(codeLine[2])){
+                if(readerNextLine.split("\\s+").length>=2) {
+                    lineNum += 4;
+                }
+                if (readerNextLine.split("\\s+")[0].equals(codeLine[1])){
                     address += lineNum;
+                    break;
                 }
             }
             builder.append(jInstructions.get(codeLine[0]));
-            builder.append(registers.get(codeLine[1]));
-            builder.append(Utils.to16BitBinary(address));
+            //builder.append(registers.get(codeLine[1]));
+            builder.append(Utils.to26BitBinary(address));
         }
 
         if(codeLine[0].equals("beq")){
