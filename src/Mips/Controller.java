@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class  Controller implements Initializable {
 
     private Processor processor;
 
@@ -35,8 +35,6 @@ public class Controller implements Initializable {
 
     @FXML
     public void startProgram(){
-        processor = new Processor();
-        PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
         //System.out.println(Utils.to32BitBinary(2));
         processor.singleCycle();
         //processor.registerFile.printRegisters();
@@ -52,6 +50,8 @@ public class Controller implements Initializable {
             startAddress = startingAddress.getText();
 
         Assembler.Assemble(assembly, Integer.parseInt(startAddress));
+        PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
+        processor = new Processor();
     }
 
 

@@ -34,16 +34,16 @@ public class Processor {
     }
 
     public void singleCycle(){
-        //System.out.println("Current instruction : " + currentInstruction);
+
         //System.out.println("current instruction " + InstructionMemory.getInstructionAt(PC.getPc()));
         System.out.println("memory address: " + PC.getPc());
         String currentInstruction = InstructionMemory.getInstructionAt(PC.getPc());
+        System.out.println("Current instruction : " + currentInstruction);
         PC.setPc(PC.getPc()+4);
         controlUnit.controlStuff(currentInstruction);
         boolean regDst = controlUnit.isRegDst();
         String registerWrite = regDstMux.mux(currentInstruction.substring(11,16),currentInstruction.substring(16,21),regDst);
         String readData1 = registerFile.readRegister(currentInstruction.substring(6,11));
-
         String readData2noMux = registerFile.readRegister(currentInstruction.substring(11,16));
         String readData2 = aluSrcMux.mux(readData2noMux,SignExtend.extendSign(currentInstruction.substring(16,32)),controlUnit.isALUSrc());
         System.out.println("Aluop : " + controlUnit.ALUOp);
@@ -57,6 +57,6 @@ public class Processor {
         registerFile.printRegisters();
 
         System.out.println("Number of cycles : " + cycles);
-
+        cycles++;
     }
 }

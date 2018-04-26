@@ -16,7 +16,7 @@ public class PC {
         return pc;
     }
 
-    public static void setPc(int pc) {
-        PC.pc = pc;
+    public static void setPc(int dis) {
+        pc = dis;
     }
 }

@@ -43,7 +43,7 @@ public class RegisterFile {
     }
 
     public String readRegister(String code){
-        System.out.println("Reading register : " + registers[Integer.parseInt(code,2)] + " Value : " + registers[Integer.parseInt(code,2)].getValue() );
+        System.out.println("Reading register : " + registers[Integer.parseInt(code,2)].getName() + " Value : " + registers[Integer.parseInt(code,2)].getValue() );
         return registers[Integer.parseInt(code,2)].getValue();
     }
 

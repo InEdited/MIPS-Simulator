@@ -2,8 +2,6 @@ package Mips.Processor;
 
 import Mips.Utils.Utils;
 
-import javax.rmi.CORBA.Util;
-
 public class ShiftLeft {
 
     public static String shiftLeft2(String thing){

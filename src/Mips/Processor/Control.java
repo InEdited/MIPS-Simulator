@@ -64,6 +64,19 @@ public class Control {
             ALUOp.setValue("00");
         }
 
+        //addi instruction
+        if(usedInstruction.equals("001000")){
+            RegDst.set(false);
+            ALUSrc.set(true);
+            MemToReg.set(false);
+            RegWrite.set(true);
+            MemRead.set(false);
+            MemWrite.set(false);
+            Branch.set(false);
+            Jump.set(false);
+            ALUOp.setValue("00");
+        }
+
         //sw instruction
         if(usedInstruction.equals("101011")){
             RegDst.set(true);

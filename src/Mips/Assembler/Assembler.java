@@ -23,10 +23,9 @@ public class Assembler {
     public static void Assemble(String code,int currentAddress) throws IOException {
         initMaps();
         System.out.println(code);
-        String codeUpdated = code.replaceAll(","," ");
+        String codeUpdated = code.replaceAll(","," ").replaceAll("[()]", " ");
         BufferedReader bufReader = new BufferedReader(new StringReader(codeUpdated));
         String codeLine = null;
-
         while((codeLine=bufReader.readLine())!=null){
             String[] splittedCode = codeLine.split("\\s+");
             for (String thing: splittedCode){
@@ -42,7 +41,7 @@ public class Assembler {
             for(Map.Entry entry:iInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
                     System.out.println(assembleTypeI(splittedCode));
-                    InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode));
+                    InstructionMemory.setInstruction(currentAddress, assembleTypeI(splittedCode));
                 }
             }
             for(Map.Entry entry:jInstructions.entrySet()){
@@ -114,11 +113,20 @@ public class Assembler {
     private static String assembleTypeI(String[] code){
         StringBuilder builder = new StringBuilder();
         builder.append(iInstructions.get(code[0]));
-        String rt = registers.get(code[1]);
-        String rs = registers.get(code[2]);
+        String rs,rt,immediate;
+        if(code[0].equals("lw") || code[0].equals("sw") || code[0].equals("lb") || code[0].equals("lbu") || code[0].equals("sb")){
+         rt = registers.get(code[1]);
+         immediate = Utils.to16BitBinary(Integer.parseInt(code[2]));
+         rs = registers.get(code[3]);
+        }
+        else {
+            rt = registers.get(code[1]);
+            rs = registers.get(code[2]);
+
+            immediate = Utils.to16BitBinary(Integer.parseInt(code[3]));
+        }
         builder.append(rs);
         builder.append(rt);
-        String immediate = Utils.to16BitBinary(Integer.parseInt(code[3]));
         builder.append(immediate);
         return builder.toString();
     }

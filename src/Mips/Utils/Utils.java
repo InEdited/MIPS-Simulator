@@ -10,7 +10,19 @@ public class Utils {
     }
     public static String to32BitBinary(int number){
         if(number>=0){
-            String temp = Long.toString(number);
+            String temp = Long.toBinaryString(number);
+            String thingie = padding + temp;
+
+            return thingie.substring(temp.length()+1);
+        }
+        else
+            return Long.toBinaryString(number);
+    }
+
+
+    public static String to32BitBinary(long number){
+        if(number>=0){
+            String temp = Long.toBinaryString(number);
             String thingie = padding + temp;
 
             return thingie.substring(temp.length()+1);
