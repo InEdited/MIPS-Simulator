@@ -86,9 +86,12 @@ public class Assembler {
             int lineNum = address;
             String readerNextLine = null;
             while ((readerNextLine=bufferedReader.readLine())!=null){
-                lineNum++;
-                if (readerNextLine.contains(codeLine[2])){
-                    address = lineNum - address;
+                if(readerNextLine.split("\\s+").length>=2) {
+                    lineNum += 1;
+                }
+                if (readerNextLine.split("\\s+")[0].equals(codeLine[1])){
+                    address += lineNum;
+                    break;
                 }
             }
             builder.append(jInstructions.get(codeLine[0]));
