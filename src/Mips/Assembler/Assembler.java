@@ -53,8 +53,8 @@ public class Assembler {
             }
             for(Map.Entry entry:jInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
-                    System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, baseAddress));
-                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, baseAddress));
+                    System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, baseAddress,currentAddress));
+                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, baseAddress,currentAddress));
                     currentAddress += 4;
 
                 }
@@ -62,7 +62,7 @@ public class Assembler {
         }
     }
 
-    private static String weScrewedBoiJump(String[] codeLine,String code,int address) throws IOException {
+    private static String weScrewedBoiJump(String[] codeLine,String code,int address,int currentAddress) throws IOException {
         StringBuilder builder = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new StringReader(code));
         if(codeLine[0].equals("j") || codeLine[0].equals("jal")){
@@ -79,18 +79,18 @@ public class Assembler {
             }
             builder.append(jInstructions.get(codeLine[0]));
             //builder.append(registers.get(codeLine[1]));
-            builder.append(Utils.to26BitBinary(address));
+            builder.append(Utils.to26BitBinary(address/4));
         }
 
         if(codeLine[0].equals("beq")){
-            int lineNum = address;
+            int lineNum = address-4;
             String readerNextLine = null;
             while ((readerNextLine=bufferedReader.readLine())!=null){
                 if(readerNextLine.split("\\s+").length>=2) {
-                    lineNum += 1;
+                    lineNum += 4;
                 }
-                if (readerNextLine.split("\\s+")[0].equals(codeLine[1])){
-                    address += lineNum;
+                if (readerNextLine.split("\\s+")[0].equals(codeLine[3])){
+                    address = (lineNum - currentAddress)/4;
                     break;
                 }
             }

@@ -5,7 +5,7 @@ import Mips.Utils.Utils;
 public class SignExtend {
 
     public static String extendSign(String stuff){
-        int integerStuff = Integer.parseInt(stuff,2);
+        int integerStuff = Utils.parseSignedInt(stuff);
             return Utils.to32BitBinary(integerStuff);
     }
 }

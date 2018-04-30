@@ -4,8 +4,10 @@ import Mips.Utils.Utils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.rmi.CORBA.Util;
+
 public class ALU {
-    public Boolean zeroFlag;
+    public Boolean zeroFlag = false;
     public long ALUResult;
 
     public String calculate(String firstValue,String secondValue,String controlSignal){
@@ -15,7 +17,7 @@ public class ALU {
             ALUResult =  Long.parseLong(firstValue,2) + Long.parseLong(secondValue,2);
         //sub
         if(controlSignal.equals("0110")) {
-            ALUResult = Long.parseLong(firstValue, 2) - Long.parseLong(secondValue, 2);
+            ALUResult = Utils.parseSignedLong(Utils.to32BitBinary(Long.parseLong(firstValue, 2) - Long.parseLong(secondValue, 2)));
             zeroFlag = ALUResult == 0;
         }
         //and

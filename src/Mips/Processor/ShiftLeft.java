@@ -4,7 +4,7 @@ import Mips.Utils.Utils;
 
 public class ShiftLeft {
 
-    public static String shiftLeft2(String thing){
-        return Utils.to32BitBinary(Integer.parseInt(thing + "00" , 2));
+    public static String shiftLeft(String thing){
+        return Utils.to32BitBinary(Long.parseLong(thing + "00" , 2));
     }
 }
