@@ -1,11 +1,16 @@
 package Mips.Processor;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 
 public class ALUControl {
     //private StringProperty aluControl;
+    private BooleanProperty JAL = new SimpleBooleanProperty();
+
 
     public String getALUControlOp(String control,String functionCode){
+        JAL.set(false);
         if(control.equals("00"))
                 return "0010";
         if(control.equals("01"))
@@ -21,6 +26,17 @@ public class ALUControl {
                     return "0001";
                 if(functionCode.equals("101010"))
                     return "0111";
+                //NOR
+                if(functionCode.equals("100111"))
+                    return "1000";
+                if(functionCode.equals("001000"))
+                    return "0010";
+                //jal
+                if(functionCode.equals("000011")){
+                    JAL.set(true);
+                    return "0000";
+                }
+
 
 
         else{

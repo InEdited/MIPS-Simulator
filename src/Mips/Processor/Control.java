@@ -13,7 +13,8 @@ public class Control {
             ,MemToReg = new SimpleBooleanProperty()
             ,MemWrite = new SimpleBooleanProperty()
             ,ALUSrc = new SimpleBooleanProperty()
-            ,RegWrite = new SimpleBooleanProperty();
+            ,RegWrite = new SimpleBooleanProperty()
+            ,JAL = new SimpleBooleanProperty();
     public StringProperty ALUOp = new SimpleStringProperty();
 
     public Control(){
@@ -25,6 +26,7 @@ public class Control {
         this.MemWrite.set(false);
         this.ALUSrc.set(false);
         this.RegWrite.set(false);
+        this.JAL.set(false);
         //this.ALUOp.set("00");
     }
 
@@ -39,15 +41,9 @@ public class Control {
             RegWrite.set(true);
             MemRead.set(false);
             MemWrite.set(false);
-            //if r type instruction is jr
-            if(instruction.substring(26,31).equals("001000")){
-                Branch.set(true);
-                Jump.set(true);
-            }
-            else{
-                Branch.set(false);
-                Jump.set(false);
-            }
+            JAL.set(false);
+            Branch.set(true);
+            Jump.set(false);
             ALUOp.setValue("10");
         }
 
@@ -61,6 +57,7 @@ public class Control {
             MemWrite.set(false);
             Branch.set(false);
             Jump.set(false);
+            JAL.set(false);
             ALUOp.setValue("00");
         }
 
@@ -74,6 +71,7 @@ public class Control {
             MemWrite.set(false);
             Branch.set(false);
             Jump.set(false);
+            JAL.set(false);
             ALUOp.setValue("00");
         }
 
@@ -87,6 +85,7 @@ public class Control {
             MemWrite.set(true);
             Branch.set(false);
             Jump.set(false);
+            JAL.set(false);
             ALUOp.setValue("00");
         }
 
@@ -100,6 +99,7 @@ public class Control {
             MemWrite.set(false);
             Branch.set(true);
             Jump.set(false);
+            JAL.set(false);
             ALUOp.setValue("01");
         }
 
@@ -113,6 +113,7 @@ public class Control {
             MemWrite.set(false);
             Branch.set(true);
             Jump.set(true);
+            JAL.set(false);
             ALUOp.setValue("01");
         }
         //jal
@@ -120,11 +121,12 @@ public class Control {
             RegDst.set(true);
             ALUSrc.set(false);
             MemToReg.set(false);
-            RegWrite.set(false);
+            RegWrite.set(true);
             MemRead.set(false);
-            MemWrite.set(true);
+            MemWrite.set(false);
             Branch.set(true);
             Jump.set(true);
+            JAL.set(true);
             ALUOp.setValue("01");
         }
     }

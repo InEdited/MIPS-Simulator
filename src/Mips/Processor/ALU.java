@@ -26,9 +26,19 @@ public class ALU {
         //or
         if(controlSignal.equals("0001"))
             ALUResult =  Long.parseLong(firstValue,2) | Long.parseLong(secondValue,2);
-        //stl
-        if(controlSignal.equals("0111"))
-            ALUResult =  Long.parseLong(firstValue,2) + Long.parseLong(secondValue,2);
+        //slt
+        if(controlSignal.equals("0111")){
+            if(Long.parseLong(firstValue,2)<Long.parseLong(secondValue,2)){
+                ALUResult = 1;
+            }
+            else{
+                ALUResult = 0;
+            }
+        }
+        //nor
+        if(controlSignal.equals("1000")) {
+            ALUResult = ~(Long.parseLong(firstValue, 2) | Long.parseLong(secondValue, 2));
+        }
         //System.out.println("Error: Problem with Alu calculation");
         return Utils.to32BitBinary(ALUResult);
     }

@@ -4,12 +4,14 @@ public class Utils {
     private static final String padding = "000000000000000000000000000000000";
     private static final String paddingOnes = "11111111111111111111111111111111";
     private static final String padding26 = "000000000000000000000000000";
+
     public static String to16BitBinary(int number){
-        if(number>0)
+        if(number>=0)
             return Integer.toBinaryString(0x10000 | number).substring(1);
         else
             return Integer.toBinaryString(number).substring(16);
     }
+
     public static String to32BitBinary(int number){
         if(number>=0){
             String temp = Long.toBinaryString(number);
