@@ -6,11 +6,11 @@ import javafx.beans.property.StringProperty;
 
 public class ALUControl {
     //private StringProperty aluControl;
-    private BooleanProperty JAL = new SimpleBooleanProperty();
+    private BooleanProperty JR = new SimpleBooleanProperty();
 
 
     public String getALUControlOp(String control,String functionCode){
-        JAL.set(false);
+        JR.set(false);
         if(control.equals("00"))
                 return "0010";
         if(control.equals("01"))
@@ -29,12 +29,11 @@ public class ALUControl {
                 //NOR
                 if(functionCode.equals("100111"))
                     return "1000";
-                if(functionCode.equals("001000"))
+
+                //jr
+                if(functionCode.equals("001000")){
+                    JR.set(true);
                     return "0010";
-                //jal
-                if(functionCode.equals("000011")){
-                    JAL.set(true);
-                    return "0000";
                 }
 
 
@@ -43,5 +42,13 @@ public class ALUControl {
                     System.out.println("Error : Problem with the ALUControl unit.");
                 return "";
             }
+    }
+
+    public boolean isJR() {
+        return JR.get();
+    }
+
+    public BooleanProperty JRProperty() {
+        return JR;
     }
 }

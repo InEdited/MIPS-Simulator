@@ -207,4 +207,12 @@ public class Control {
     public  StringProperty ALUOpProperty() {
         return ALUOp;
     }
+
+    public boolean isJAL() {
+        return JAL.get();
+    }
+
+    public BooleanProperty JALProperty() {
+        return JAL;
+    }
 }
