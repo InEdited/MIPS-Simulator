@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class DataMemory {
     private Processor processor;
-    HashMap<Integer,String> dataMemory = new HashMap<Integer, String>();
+    HashMap<Long, String> dataMemory = new HashMap<Long, String>();
 
     public DataMemory(Processor processor){
         this.processor = processor;
@@ -21,15 +21,37 @@ public class DataMemory {
         else
             return "";
     }
-    public String memWrite(int address,String data){
+    public void memWrite(long address, String data){
         if(processor.controlUnit.isMemWrite()){
 
-                return dataMemory.put(address,data);
+            if(address%4==0) {
+                dataMemory.put(address, data);
+            }
+
+            else{
+                String temp = data.substring(24,32);
+                String x = dataMemory.get(address);
+                int offset = (int) (address%4);
+                //String fullAddress = dataMemory.get(address-offset);
+                if(x==null){
+                    x="00000000000000000000000000000000";
+                }
+                if(offset==0)
+                    temp = x.substring(0,24).concat(temp);
+                else if (offset == 1)
+                    temp = x.substring(0,16)+temp+x.substring(24,32);
+                else if (offset == 2)
+                    temp = x.substring(0,8)+temp+x.substring(16,32);
+                else if (offset==3)
+                    temp = temp + x.substring(8,32);
+                dataMemory.put(address,temp);
+            }
+
 
         }
         else {
             System.out.println("Error : Trying to write to memory with no access");
-            return "";
+
         }
     }
 

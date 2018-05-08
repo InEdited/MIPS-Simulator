@@ -100,7 +100,7 @@ public class Processor {
         //System.out.println("Aluop : " + controlUnit.ALUOp);
         aluResult = alu.calculate(readData1,readData2,aluCont);
         //System.out.println("Alu result : " + aluResult);
-        dataMemory.memWrite(Integer.parseInt(aluResult,2),readData2noMux);
+        dataMemory.memWrite(Long.parseLong(aluResult,2),readData2noMux);
         memRead = dataMemory.memRead(Integer.parseInt(aluResult,2));
         zeroFlag = alu.zeroFlag;
         if(zeroFlag && controlUnit.isBranch())

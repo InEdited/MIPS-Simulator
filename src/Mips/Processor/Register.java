@@ -18,6 +18,9 @@ public class Register {
         this.code.set(Integer.parseInt(code));
         value = new SimpleStringProperty();
         this.value.set("00000000000000000000000000000000");
+        if(this.name.equals("$sp")){
+            this.value.set("00000001111111111111111111111111");
+        }
     }
 
 
