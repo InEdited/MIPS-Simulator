@@ -36,7 +36,13 @@ public class  Controller implements Initializable {
     @FXML
     public void startProgram(){
         //System.out.println(Utils.to32BitBinary(2));
-        processor.singleCycle();
+       try{
+           processor.singleCycle();
+       }
+       catch (StringIndexOutOfBoundsException e){
+           System.out.println("Program Ended with exception");
+           startButton.setDisable(true);
+       }
         //processor.registerFile.printRegisters();
     }
 
@@ -51,14 +57,18 @@ public class  Controller implements Initializable {
 
         Assembler.Assemble(assembly, Integer.parseInt(startAddress));
         PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
-        processor = new Processor();
+        processor.registerFile = new RegisterFile(processor);
+        startButton.setDisable(false);
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting the Program");
+        startButton.setDisable(true);
         //processor = new Processor();
+        processor = new Processor();
+
     }
 
 

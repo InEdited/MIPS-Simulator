@@ -114,6 +114,14 @@ public class Assembler {
         builder.append(sixZeros);
         String rd = registers.get(code[1]);
         String rs = registers.get(code[2]);
+        if(code[0].equals("sll")){
+            builder.append(rs);
+            builder.append(fiveZeros);
+            builder.append(rd);
+            builder.append(Utils.to5BitBinary(Integer.parseInt(code[3])));
+            builder.append(rInstructions.get(code[0]));
+            return builder.toString();
+        }
         String rt = registers.get(code[3]);
         builder.append(rs);
         builder.append(rt);
@@ -184,7 +192,7 @@ public class Assembler {
         //Initializing R type Instructions
         rInstructions.put("add","100000");
         rInstructions.put("sll","000000");
-        rInstructions.put("nor","100011");
+        rInstructions.put("nor","100111");
         rInstructions.put("slt","101010");
 
         //Initializing I type Instructions

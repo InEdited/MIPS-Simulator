@@ -44,11 +44,24 @@ public class Control {
             JAL.set(false);
             Branch.set(true);
             Jump.set(false);
-            ALUOp.setValue("10");
+            ALUOp.setValue("010");
+        }
+        //slti
+        if(usedInstruction.equals("001010")){
+            RegDst.set(false);
+            ALUSrc.set(true);
+            MemToReg.set(false);
+            RegWrite.set(true);
+            MemRead.set(false);
+            MemWrite.set(false);
+            JAL.set(false);
+            Branch.set(true);
+            Jump.set(false);
+            ALUOp.setValue("100");
         }
 
-        //lw instruction
-        if(usedInstruction.equals("100011")){
+        //lw and lb instruction
+        if(usedInstruction.equals("100011")||usedInstruction.equals("100000")||usedInstruction.equals("100100")){
             RegDst.set(false);
             ALUSrc.set(true);
             MemToReg.set(true);
@@ -58,7 +71,7 @@ public class Control {
             Branch.set(false);
             Jump.set(false);
             JAL.set(false);
-            ALUOp.setValue("00");
+            ALUOp.setValue("000");
         }
 
         //addi instruction
@@ -72,11 +85,11 @@ public class Control {
             Branch.set(false);
             Jump.set(false);
             JAL.set(false);
-            ALUOp.setValue("00");
+            ALUOp.setValue("000");
         }
 
-        //sw instruction
-        if(usedInstruction.equals("101011")){
+        //sw and sb instruction
+        if(usedInstruction.equals("101011")||usedInstruction.equals("101000")){
             RegDst.set(true);
             ALUSrc.set(true);
             MemToReg.set(false);
@@ -86,7 +99,7 @@ public class Control {
             Branch.set(false);
             Jump.set(false);
             JAL.set(false);
-            ALUOp.setValue("00");
+            ALUOp.setValue("000");
         }
 
         //beq instruction
@@ -100,7 +113,7 @@ public class Control {
             Branch.set(true);
             Jump.set(false);
             JAL.set(false);
-            ALUOp.setValue("01");
+            ALUOp.setValue("001");
         }
 
         //jumping shit
@@ -114,7 +127,7 @@ public class Control {
             Branch.set(true);
             Jump.set(true);
             JAL.set(false);
-            ALUOp.setValue("01");
+            ALUOp.setValue("001");
         }
         //jal
         if(usedInstruction.equals("000011")){
@@ -127,7 +140,7 @@ public class Control {
             Branch.set(true);
             Jump.set(true);
             JAL.set(true);
-            ALUOp.setValue("01");
+            ALUOp.setValue("001");
         }
     }
 

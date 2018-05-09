@@ -11,6 +11,20 @@ public class Utils {
         else
             return Integer.toBinaryString(number).substring(16);
     }
+    public static String to5BitBinary(int number){
+        if(number>=0){
+            String temp = Integer.toBinaryString(number);
+            String thingie = "00000" + temp;
+
+            return thingie.substring(temp.length());
+        }
+        else {
+            String temp = Integer.toBinaryString(number);
+            String thingie = "11111" + temp;
+
+            return thingie.substring(temp.length());
+        }
+    }
 
     public static String to32BitBinary(int number){
         if(number>=0){
@@ -23,7 +37,7 @@ public class Utils {
             String temp = Long.toBinaryString(number);
             String thingie = paddingOnes + temp;
 
-            return thingie.substring(temp.length()+1);
+            return thingie.substring(temp.length());
         }
     }
 
@@ -39,7 +53,7 @@ public class Utils {
             String temp = Long.toBinaryString(number);
             String thingie = paddingOnes + temp;
 
-            return thingie.substring(temp.length() + 1);
+            return thingie.substring(temp.length());
         }
     }
 

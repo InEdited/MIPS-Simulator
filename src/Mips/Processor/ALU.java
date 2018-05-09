@@ -14,7 +14,7 @@ public class ALU {
         System.out.println("ALU unit executing : " + controlSignal + "on values : " + firstValue + " and " + secondValue);
         //add
         if(controlSignal.equals("0010"))
-            ALUResult =  Long.parseLong(firstValue,2) + Long.parseLong(secondValue,2);
+            ALUResult =  Utils.parseSignedLong(firstValue) + Utils.parseSignedLong(secondValue);
         //sub
         if(controlSignal.equals("0110")) {
             ALUResult = Utils.parseSignedLong(Utils.to32BitBinary(Long.parseLong(firstValue, 2) - Long.parseLong(secondValue, 2)));
@@ -34,6 +34,14 @@ public class ALU {
             else{
                 ALUResult = 0;
             }
+        }
+        //sll
+        if(controlSignal.equals("1001")){
+            ALUResult = Utils.parseSignedLong(firstValue)<< Utils.parseSignedInt(secondValue);
+        }
+        //srl
+        if(controlSignal.equals("1010")){
+            ALUResult = Utils.parseSignedLong(firstValue) >>> Utils.parseSignedInt(secondValue);
         }
         //nor
         if(controlSignal.equals("1000")) {

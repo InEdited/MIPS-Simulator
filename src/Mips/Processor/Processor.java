@@ -5,7 +5,7 @@ import Mips.Utils.Utils;
 public class Processor {
 
     public ALUControl aluControl;
-    public Mux aluSrcMux,memToRegMux,pcBranchMux,pcBranchJumpMux,regDstMux,regDstJalMux,jalMux,jrMux;
+    public Mux shamtMux,aluSrcMux,memToRegMux,pcBranchMux,pcBranchJumpMux,regDstMux,regDstJalMux,jalMux,jrMux;
     public ALU alu;
     public Control controlUnit;
     public RegisterFile registerFile;
@@ -14,6 +14,7 @@ public class Processor {
     public PC pc;
     public DataMemory dataMemory;
     public static int cycles =1;
+    public MemoryController memoryController;
 
     //Instructions
     private String instruction20_16;
@@ -21,6 +22,9 @@ public class Processor {
     private String instruction25_21;
     private String instruction15_0;
     private String insruction25_0;
+    private String instruction31_26;
+    private String instruction6_10;
+    private String instruction5_0;
 
     //Wires
     private String currentInstruction;
@@ -30,6 +34,7 @@ public class Processor {
     private String readData1;
     private String readData2noMux;
     private String signExtendedThing;
+    private String readData2Tany;
     private String readData2;
     private String aluCont;
     private String aluResult;
@@ -40,6 +45,7 @@ public class Processor {
     private boolean beqAndGate;
     private boolean jalFlag;
     private boolean jrFlag;
+    private boolean shamtFlag;
     private String shiftedLeftJumpThing;
     private String shiftedLeftSignExtendedThing;
     private String branchAddress;
@@ -47,6 +53,7 @@ public class Processor {
     private int newPc;
     private int pcIncremented;
     private String betweenJRandJump;
+    private String memOp;
 
 
 
@@ -54,6 +61,7 @@ public class Processor {
     public Processor(){
         aluControl = new ALUControl();
         aluSrcMux = new Mux();
+        shamtMux = new Mux();
         pcBranchJumpMux = new Mux();
         pcBranchMux = new Mux();
         memToRegMux = new Mux();
@@ -69,6 +77,8 @@ public class Processor {
         shiftLeft = new ShiftLeft();
         jumpShiftLeft = new ShiftLeft();
         dataMemory = new DataMemory(this);
+        memoryController = new MemoryController();
+
     }
 
     public void stepOne(){
@@ -81,27 +91,35 @@ public class Processor {
         //System.out.println("memory address: " + PC.getPc());
         currentInstruction = InstructionMemory.getInstructionAt(PC.getPc());
         instruction20_16 = currentInstruction.substring(11, 16);
+        instruction6_10 = currentInstruction.substring(21,26);
         instruction15_11 = currentInstruction.substring(16, 21);
         instruction25_21 = currentInstruction.substring(6, 11);
         instruction15_0 = currentInstruction.substring(16, 32);
         insruction25_0 = currentInstruction.substring(6,32);
+        instruction31_26 = currentInstruction.substring(0,6);
+        instruction5_0 = currentInstruction.substring(26, 32);
         //System.out.println("Current instruction : " + currentInstruction);
         PC.setPc(PC.getPc()+4);
         pcIncremented = PC.getPc();
         controlUnit.controlStuff(currentInstruction);
-        aluCont = aluControl.getALUControlOp(String.valueOf(controlUnit.getALUOp()),currentInstruction.substring(26,32));
+        memOp  = memoryController.getMemOp(instruction31_26);
+        dataMemory.setMemOp(memOp);
+        aluCont = aluControl.getALUControlOp(String.valueOf(controlUnit.getALUOp()), instruction5_0);
         regDst = controlUnit.isRegDst();
         jalFlag = controlUnit.isJAL();
         jrFlag = aluControl.isJR();
+        shamtFlag = aluControl.isShamt();
+        boolean isMemWrite = controlUnit.isMemWrite();
         readData1 = registerFile.readRegister(instruction25_21);
         readData2noMux = registerFile.readRegister(instruction20_16);
         signExtendedThing = SignExtend.extendSign(instruction15_0);
-        readData2 = aluSrcMux.mux(readData2noMux,signExtendedThing,controlUnit.isALUSrc());
+        readData2 = shamtMux.mux(readData2noMux,instruction6_10,shamtFlag);
+        readData2Tany = aluSrcMux.mux(readData2,signExtendedThing,controlUnit.isALUSrc());
         //System.out.println("Aluop : " + controlUnit.ALUOp);
-        aluResult = alu.calculate(readData1,readData2,aluCont);
-        //System.out.println("Alu result : " + aluResult);
+        aluResult = alu.calculate(readData1, readData2Tany,aluCont);
+        System.out.println("Alu result : " + aluResult);
         dataMemory.memWrite(Long.parseLong(aluResult,2),readData2noMux);
-        memRead = dataMemory.memRead(Integer.parseInt(aluResult,2));
+        memRead = dataMemory.memRead(Utils.parseSignedLong(aluResult));
         zeroFlag = alu.zeroFlag;
         if(zeroFlag && controlUnit.isBranch())
             beqAndGate = true;
