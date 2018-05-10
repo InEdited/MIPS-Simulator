@@ -39,7 +39,7 @@ public class Assembler {
             for(Map.Entry entry:rInstructions.entrySet()) {
                 if (entry.getKey().equals(splittedCode[0])){
                     System.out.println(assembleTypeR(splittedCode));
-                    InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode));
+                    InstructionMemory.setInstruction(currentAddress, assembleTypeR(splittedCode),codeLine);
                     //System.out.println(InstructionMemory.getInstructionAt(currentAddress));
                     currentAddress += 4;
                 }
@@ -47,14 +47,14 @@ public class Assembler {
             for(Map.Entry entry:iInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
                     System.out.println(assembleTypeI(splittedCode));
-                    InstructionMemory.setInstruction(currentAddress, assembleTypeI(splittedCode));
+                    InstructionMemory.setInstruction(currentAddress, assembleTypeI(splittedCode),codeLine);
                     currentAddress += 4;
                 }
             }
             for(Map.Entry entry:jInstructions.entrySet()){
                 if(entry.getKey().equals(splittedCode[0])) {
                     System.out.println(weScrewedBoiJump(splittedCode, codeUpdated, baseAddress,currentAddress));
-                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, baseAddress,currentAddress));
+                    InstructionMemory.setInstruction(currentAddress,weScrewedBoiJump(splittedCode, codeUpdated, baseAddress,currentAddress),codeLine);
                     currentAddress += 4;
 
                 }

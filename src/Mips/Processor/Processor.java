@@ -53,7 +53,7 @@ public class Processor {
     private int newPc;
     private int pcIncremented;
     private String betweenJRandJump;
-    private String memOp;
+     String memOp;
 
 
 
@@ -128,9 +128,9 @@ public class Processor {
         shiftedLeftJumpThing = shiftLeft.shiftLeft(insruction25_0);
         shiftedLeftSignExtendedThing = shiftLeft.shiftLeft(signExtendedThing);
         branchAddress = adder.add(Utils.parseSignedInt(shiftedLeftSignExtendedThing), PC.getPc());
-        newPcBeforeJump = (Integer.parseInt(pcBranchMux.mux(Long.toBinaryString(PC.getPc()),branchAddress,beqAndGate),2));
+        newPcBeforeJump = (int) Long.parseLong(pcBranchMux.mux(Long.toBinaryString(PC.getPc()), branchAddress, beqAndGate),2);
         betweenJRandJump = jrMux.mux(Integer.toBinaryString(newPcBeforeJump),readData1,jrFlag);
-        newPc = Integer.parseInt(pcBranchJumpMux.mux(betweenJRandJump,shiftedLeftJumpThing,controlUnit.isJump()),2);
+        newPc = (int)Long.parseLong(pcBranchJumpMux.mux(betweenJRandJump,shiftedLeftJumpThing,controlUnit.isJump()),2);
         PC.setPc(newPc);
 
         registerWrite = regDstMux.mux(instruction20_16, instruction15_11,regDst);

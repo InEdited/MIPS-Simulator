@@ -42,7 +42,7 @@ public class Control {
             MemRead.set(false);
             MemWrite.set(false);
             JAL.set(false);
-            Branch.set(true);
+            Branch.set(false);
             Jump.set(false);
             ALUOp.setValue("010");
         }

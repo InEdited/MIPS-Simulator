@@ -27,7 +27,7 @@ public class MemoryController {
             return "011";
         }
         //lw
-        if(instruction.equals("10011")){
+        if(instruction.equals("100011")){
             return "100";
         }
         //sb

@@ -19,6 +19,7 @@ public class DataMemory {
 
     public String memRead(long address){
         String returnDis;
+        memOp = processor.memOp;
         if(processor.controlUnit.isMemRead()) {
             int offset = Math.toIntExact(address % 4);
             if (dataMemory.get((address-offset))!=null) {
@@ -158,7 +159,7 @@ public class DataMemory {
 
             //Sb
             if(memOp.equals("101")){
-                String addDis = data.substring(0,8);
+                String addDis = data.substring(24,32);
                 String temp = dataMemory.get(address-offset);
                 if(offset==0){
                     makeDis = temp.substring(0,24) + addDis ;
@@ -191,34 +192,6 @@ public class DataMemory {
             }
 
             dataMemory.put((address-offset),makeDis);
-
-
-
-
-            /*
-            if(address%4==0) {
-                dataMemory.put(address, data);
-            }
-
-            else{
-                String temp = data.substring(24,32);
-                String x = dataMemory.get(address);
-                int offset = (int) (address%4);
-                //String fullAddress = dataMemory.get(address-offset);
-                if(x==null){
-                    x= padding32;
-                }
-                if(offset==0)
-                    temp = x.substring(0,24).concat(temp);
-                else if (offset == 1)
-                    temp = x.substring(0,16)+temp+x.substring(24,32);
-                else if (offset == 2)
-                    temp = x.substring(0,8)+temp+x.substring(16,32);
-                else if (offset==3)
-                    temp = temp + x.substring(8,32);
-                dataMemory.put(address,temp);
-            }
-*/
 
 
         }

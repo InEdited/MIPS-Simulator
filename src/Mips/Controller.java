@@ -7,15 +7,15 @@ import Mips.Processor.RegisterFile;
 import Mips.Utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import Mips.Assembler.Assembler;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class  Controller implements Initializable {
 
@@ -28,22 +28,54 @@ public class  Controller implements Initializable {
     private TextField startingAddress;
 
     @FXML
+    private Button stepButton;
+
+    @FXML
     private Button startButton;
+    @FXML
+    private Button stopButton;
 
     @FXML
     private Button assembleButton;
 
     @FXML
-    public void startProgram(){
+    private Slider speedSlider;
+
+    @FXML
+    private Label speedLabel;
+
+    int delay;
+    Timer timer = new Timer();
+
+
+
+    @FXML
+    public void stepProgram(){
         //System.out.println(Utils.to32BitBinary(2));
        try{
            processor.singleCycle();
        }
        catch (StringIndexOutOfBoundsException e){
+           System.out.println(e.fillInStackTrace());
            System.out.println("Program Ended with exception");
            startButton.setDisable(true);
+           stepButton.setDisable(true);
+           stopProgram();
        }
+
         //processor.registerFile.printRegisters();
+    }
+
+    @FXML
+    public void startProgram(){
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stepProgram();
+            }
+        },delay,delay);
+
     }
 
     @FXML
@@ -58,6 +90,7 @@ public class  Controller implements Initializable {
         Assembler.Assemble(assembly, Integer.parseInt(startAddress));
         PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
         processor.registerFile = new RegisterFile(processor);
+        stepButton.setDisable(false);
         startButton.setDisable(false);
     }
 
@@ -65,14 +98,30 @@ public class  Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting the Program");
+        stepButton.setDisable(true);
         startButton.setDisable(true);
+        changeSpeed();
         //processor = new Processor();
         processor = new Processor();
 
     }
 
+    @FXML
+    public void changeSpeed(){
+        speedLabel.setText(String.valueOf((int)speedSlider.getValue()));
+        int speed = (int)speedSlider.getValue();
+        if(speed == 100)
+            delay = 1;
+        else
+            delay = speed *50;
+    }
 
     public TextField getStartingAddress() {
         return startingAddress;
+    }
+    @FXML
+    public void stopProgram(){
+        timer.cancel();
+        timer.purge();
     }
 }

@@ -13,7 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("MIPS Simulator");
 
-        primaryStage.setScene(new Scene(root, root.minWidth(0), root.minHeight(0)));
+        primaryStage.setScene(new Scene(root, root.prefWidth(1366), root.prefHeight(768)));
         primaryStage.show();
     }
 
