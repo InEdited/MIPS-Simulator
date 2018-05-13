@@ -55,7 +55,7 @@ public class Control {
             MemRead.set(false);
             MemWrite.set(false);
             JAL.set(false);
-            Branch.set(true);
+            Branch.set(false);
             Jump.set(false);
             ALUOp.setValue("100");
         }
@@ -227,5 +227,9 @@ public class Control {
 
     public BooleanProperty JALProperty() {
         return JAL;
+    }
+
+    public void setMemWrite(boolean memWrite) {
+        this.MemWrite.set(memWrite);
     }
 }

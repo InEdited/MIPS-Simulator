@@ -43,9 +43,11 @@ public class MemoryController {
             return "111";
         }
         else{
-            System.out.println("Error : memory controller error");
+            //System.out.println("Error : memory controller error");
             return "";
         }
     }
+
+
 
 }

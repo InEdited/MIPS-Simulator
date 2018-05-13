@@ -19,7 +19,7 @@ public class Register {
         value = new SimpleStringProperty();
         this.value.set("00000000000000000000000000000000");
         if(this.name.getValue().equals("$sp")){
-            this.value.set("00000111111111111111111111111111");
+            this.value.set("00000111111111111111111111111100");
         }
     }
 

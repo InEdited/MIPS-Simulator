@@ -196,7 +196,7 @@ public class DataMemory {
 
         }
         else {
-            System.out.println("Error : Trying to write to memory with no access");
+            //System.out.println("Error : Trying to write to memory with no access");
 
         }
     }

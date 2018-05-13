@@ -11,6 +11,7 @@ public class ALU {
     public long ALUResult;
 
     public String calculate(String firstValue,String secondValue,String controlSignal){
+        zeroFlag = false;
         System.out.println("ALU unit executing : " + controlSignal + "on values : " + firstValue + " and " + secondValue);
         //add
         if(controlSignal.equals("0010"))

@@ -9,8 +9,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import Mips.Assembler.Assembler;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -44,8 +47,27 @@ public class  Controller implements Initializable {
     @FXML
     private Label speedLabel;
 
+    @FXML
+    private TextField dataAddress;
+
+    @FXML
+    private TextField dataMemory;
+
+    @FXML
+    private Button addData;
+
+    @FXML
+    private MenuItem openFileButton;
+
+    @FXML
+    private ImageView imageView;
+
+    @FXML
+    private TextArea consoleArea;
+
     int delay;
     Timer timer = new Timer();
+    private PrintStream ps ;
 
 
 
@@ -98,12 +120,15 @@ public class  Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting the Program");
+        imageView.setImage(new Image("Mips/dataPath.png"));
         stepButton.setDisable(true);
         startButton.setDisable(true);
         changeSpeed();
         //processor = new Processor();
         processor = new Processor();
-
+        //PrintStream printStream = new PrintStream(new CustomOutputStream(consoleArea));
+        //System.setOut(printStream);
+        //System.setErr(printStream);
     }
 
     @FXML
@@ -123,5 +148,45 @@ public class  Controller implements Initializable {
     public void stopProgram(){
         timer.cancel();
         timer.purge();
+    }
+
+    @FXML
+    public void openFile(){
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+
+        if(selectedFile != null){
+            try {
+                FileReader reader = new FileReader(selectedFile);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                while (bufferedReader.readLine()!=null) {
+                    assemblyText.setText(assemblyText.getText() + "\n" + bufferedReader.readLine());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void addData(){
+        processor.controlUnit.setMemWrite(true);
+        processor.dataMemory.setMemOp("111");
+        processor.dataMemory.memWrite(Long.parseLong(dataAddress.getText())
+                , String.valueOf(Utils.parseSignedLong(Utils.to32BitBinary(Integer.parseInt(dataMemory.getText())))));
+        processor.controlUnit.setMemWrite(false);
+    }
+    public class CustomOutputStream extends OutputStream {
+        private TextArea textArea;
+
+        public CustomOutputStream(TextArea textArea) {
+            this.textArea = textArea;
+        }
+        @Override
+        public void write(int b) throws IOException {
+
+            //textArea.appendText(String.valueOf((char)b));
+        }
     }
 }
