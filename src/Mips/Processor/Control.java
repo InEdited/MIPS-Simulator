@@ -59,6 +59,32 @@ public class Control {
             Jump.set(false);
             ALUOp.setValue("100");
         }
+        //sltui
+        if(usedInstruction.equals("001011")){
+            RegDst.set(false);
+            ALUSrc.set(true);
+            MemToReg.set(false);
+            RegWrite.set(true);
+            MemRead.set(false);
+            MemWrite.set(false);
+            JAL.set(false);
+            Branch.set(false);
+            Jump.set(false);
+            ALUOp.setValue("110");
+        }
+        //ori
+        if(usedInstruction.equals("001101")){
+            RegDst.set(false);
+            ALUSrc.set(true);
+            MemToReg.set(false);
+            RegWrite.set(true);
+            MemRead.set(false);
+            MemWrite.set(false);
+            JAL.set(false);
+            Branch.set(false);
+            Jump.set(false);
+            ALUOp.setValue("101");
+        }
 
         //lw and lb instruction
         if(usedInstruction.equals("100011")||usedInstruction.equals("100000")||usedInstruction.equals("100100")){
@@ -232,4 +258,6 @@ public class Control {
     public void setMemWrite(boolean memWrite) {
         this.MemWrite.set(memWrite);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package Mips.Processor;
 
+import Mips.Utils.Utils;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -62,8 +63,8 @@ public class Register {
         return code;
     }
 
-    public void printReg(){
-        System.out.println("Register " + this.getName() + ": " + this.getValue());
+    public String printReg(){
+        return   this.getName() + " ---> " + Utils.parseSignedLong(this.getValue());
     }
 
 }

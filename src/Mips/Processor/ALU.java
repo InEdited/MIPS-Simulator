@@ -4,7 +4,6 @@ import Mips.Utils.Utils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 
-import javax.rmi.CORBA.Util;
 
 public class ALU {
     public Boolean zeroFlag = false;
@@ -23,12 +22,21 @@ public class ALU {
         }
         //and
         if(controlSignal.equals("0000"))
-            ALUResult =  Long.parseLong(firstValue,2) & Long.parseLong(secondValue,2);
+            ALUResult =  Utils.parseSignedLong(firstValue) & Utils.parseSignedLong(secondValue);
         //or
         if(controlSignal.equals("0001"))
-            ALUResult =  Long.parseLong(firstValue,2) | Long.parseLong(secondValue,2);
+            ALUResult =  Utils.parseSignedLong(firstValue) | Utils.parseSignedLong(secondValue);
         //slt
         if(controlSignal.equals("0111")){
+            if(Utils.parseSignedLong(firstValue)<Utils.parseSignedLong(secondValue)){
+                ALUResult = 1;
+            }
+            else{
+                ALUResult = 0;
+            }
+        }
+        //sltu
+        if(controlSignal.equals("1011")){
             if(Long.parseLong(firstValue,2)<Long.parseLong(secondValue,2)){
                 ALUResult = 1;
             }

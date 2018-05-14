@@ -1,8 +1,13 @@
 package Mips.Processor;
 
+import Mips.Controller;
 import Mips.Utils.Utils;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Processor {
+    public Controller controller;
 
     public ALUControl aluControl;
     public Mux shamtMux,aluSrcMux,memToRegMux,pcBranchMux,pcBranchJumpMux,regDstMux,regDstJalMux,jalMux,jrMux;
@@ -17,49 +22,51 @@ public class Processor {
     public MemoryController memoryController;
 
     //Instructions
-    private String instruction20_16;
-    private String instruction15_11;
-    private String instruction25_21;
-    private String instruction15_0;
-    private String insruction25_0;
-    private String instruction31_26;
-    private String instruction6_10;
-    private String instruction5_0;
+    private SimpleStringProperty instruction20_16 = new SimpleStringProperty(this, "instruction20_16");
+    private SimpleStringProperty instruction15_11 = new SimpleStringProperty(this, "instruction15_11");
+    private SimpleStringProperty instruction25_21 = new SimpleStringProperty(this, "instruction25_21");
+    private SimpleStringProperty instruction15_0 = new SimpleStringProperty(this, "instruction15_0");
+    private SimpleStringProperty insruction25_0 = new SimpleStringProperty(this, "insruction25_0");
+    private SimpleStringProperty instruction31_26 = new SimpleStringProperty(this, "instruction31_26");
+    private SimpleStringProperty instruction6_10 = new SimpleStringProperty(this, "instruction6_10");
+    private SimpleStringProperty instruction5_0 = new SimpleStringProperty(this, "instruction5_0");
 
     //Wires
-    private String currentInstruction;
-    private String registerWrite;
-    private String registerWriteTany;
-    private boolean regDst;
-    private String readData1;
-    private String readData2noMux;
-    private String signExtendedThing;
-    private String readData2Tany;
-    private String readData2;
-    private String aluCont;
-    private String aluResult;
-    private String memRead;
-    private String regWriteData;
-    private String regWriteDataTany;
+    private SimpleStringProperty currentInstruction = new SimpleStringProperty(this, "currentInstruction");
+    private SimpleStringProperty registerWrite = new SimpleStringProperty(this, "registerWrite");
+    private SimpleStringProperty registerWriteTany = new SimpleStringProperty(this, "registerWriteTany");
+    private BooleanProperty regDst = new SimpleBooleanProperty();
+    private SimpleStringProperty readData1 = new SimpleStringProperty(this, "readData1");
+    private SimpleStringProperty readData2noMux = new SimpleStringProperty(this, "readData2noMux");
+    private SimpleStringProperty signExtendedThing = new SimpleStringProperty(this, "signExtendedThing");
+    private SimpleStringProperty readData2Tany = new SimpleStringProperty(this, "readData2Tany");
+    private SimpleStringProperty readData2 = new SimpleStringProperty(this, "readData2");
+    private SimpleStringProperty aluCont = new SimpleStringProperty(this, "aluCont");
+    private SimpleStringProperty aluResult = new SimpleStringProperty(this, "aluResult");
+    private SimpleStringProperty memRead = new SimpleStringProperty(this, "memRead");
+    private SimpleStringProperty regWriteData = new SimpleStringProperty(this, "regWriteData");
+    private SimpleStringProperty regWriteDataTany = new SimpleStringProperty(this, "regWriteDataTany");
     private boolean zeroFlag;
     private boolean beqAndGate;
     boolean jumpFlag;
     private boolean jalFlag;
     private boolean jrFlag;
     private boolean shamtFlag;
-    private String shiftedLeftJumpThing;
-    private String shiftedLeftSignExtendedThing;
-    private String branchAddress;
+    private SimpleStringProperty shiftedLeftJumpThing = new SimpleStringProperty(this, "shiftedLeftJumpThing");
+    private SimpleStringProperty shiftedLeftSignExtendedThing = new SimpleStringProperty(this, "shiftedLeftSignExtendedThing");
+    private SimpleStringProperty branchAddress = new SimpleStringProperty(this, "branchAddress");
     private int newPcBeforeJump;
     private int newPc;
     private int pcIncremented;
-    private String betweenJRandJump;
+    private SimpleStringProperty betweenJRandJump = new SimpleStringProperty(this, "betweenJRandJump");
      String memOp;
 
 
 
 
-    public Processor(){
+    public Processor(Controller controller){
+        this.controller = controller;
+
         aluControl = new ALUControl();
         aluSrcMux = new Mux();
         shamtMux = new Mux();
@@ -90,59 +97,395 @@ public class Processor {
 
         //System.out.println("current instruction " + InstructionMemory.getInstructionAt(PC.getPc()));
         //System.out.println("memory address: " + PC.getPc());
-        currentInstruction = InstructionMemory.getInstructionAt(PC.getPc());
-        instruction20_16 = currentInstruction.substring(11, 16);
-        instruction6_10 = currentInstruction.substring(21,26);
-        instruction15_11 = currentInstruction.substring(16, 21);
-        instruction25_21 = currentInstruction.substring(6, 11);
-        instruction15_0 = currentInstruction.substring(16, 32);
-        insruction25_0 = currentInstruction.substring(6,32);
-        instruction31_26 = currentInstruction.substring(0,6);
-        instruction5_0 = currentInstruction.substring(26, 32);
+        currentInstruction.set(InstructionMemory.getInstructionAt(PC.getPc()));
+        instruction20_16.set(currentInstruction.get().substring(11, 16));
+        instruction6_10.set(currentInstruction.get().substring(21, 26));
+        instruction15_11.set(currentInstruction.get().substring(16, 21));
+        instruction25_21.set(currentInstruction.get().substring(6, 11));
+        instruction15_0.set(currentInstruction.get().substring(16, 32));
+        insruction25_0.set(currentInstruction.get().substring(6, 32));
+        instruction31_26.set(currentInstruction.get().substring(0, 6));
+        instruction5_0.set(currentInstruction.get().substring(26, 32));
         //System.out.println("Current instruction : " + currentInstruction);
         PC.setPc(PC.getPc()+4);
         pcIncremented = PC.getPc();
-        controlUnit.controlStuff(currentInstruction);
-        memOp  = memoryController.getMemOp(instruction31_26);
+        controlUnit.controlStuff(currentInstruction.get());
+        memOp  = memoryController.getMemOp(instruction31_26.get());
         dataMemory.setMemOp(memOp);
-        aluCont = aluControl.getALUControlOp(String.valueOf(controlUnit.getALUOp()), instruction5_0);
-        regDst = controlUnit.isRegDst();
+        aluCont.set(aluControl.getALUControlOp(String.valueOf(controlUnit.getALUOp()), instruction5_0.get()));
+        regDst.set(controlUnit.isRegDst());
         jalFlag = controlUnit.isJAL();
         jrFlag = aluControl.isJR();
         jumpFlag = controlUnit.isJump();
         shamtFlag = aluControl.isShamt();
         boolean isMemWrite = controlUnit.isMemWrite();
-        readData1 = registerFile.readRegister(instruction25_21);
-        readData2noMux = registerFile.readRegister(instruction20_16);
-        signExtendedThing = SignExtend.extendSign(instruction15_0);
-        readData2 = shamtMux.mux(readData2noMux,instruction6_10,shamtFlag);
-        readData2Tany = aluSrcMux.mux(readData2,signExtendedThing,controlUnit.isALUSrc());
+        readData1.set(registerFile.readRegister(instruction25_21.get()));
+        readData2noMux.set(registerFile.readRegister(instruction20_16.get()));
+        signExtendedThing.set(SignExtend.extendSign(instruction15_0.get()));
+        readData2.set(shamtMux.mux(readData2noMux.get(), instruction6_10.get(), shamtFlag));
+        readData2Tany.set(aluSrcMux.mux(readData2.get(), signExtendedThing.get(), controlUnit.isALUSrc()));
         //System.out.println("Aluop : " + controlUnit.ALUOp);
-        aluResult = alu.calculate(readData1, readData2Tany,aluCont);
-        System.out.println("Alu result : " + aluResult);
-        dataMemory.memWrite(Long.parseLong(aluResult,2),readData2noMux);
-        memRead = dataMemory.memRead(Utils.parseSignedLong(aluResult));
+        aluResult.set(alu.calculate(readData1.get(), readData2Tany.get(), aluCont.get()));
+        System.out.println("Alu result : " + aluResult.get());
+        dataMemory.memWrite(Long.parseLong(aluResult.get(),2), readData2noMux.get());
+        memRead.set(dataMemory.memRead(Utils.parseSignedLong(aluResult.get())));
         zeroFlag = alu.zeroFlag;
         if(zeroFlag && controlUnit.isBranch())
             beqAndGate = true;
         else
             beqAndGate = false;
-        shiftedLeftJumpThing = shiftLeft.shiftLeft(insruction25_0);
-        shiftedLeftSignExtendedThing = shiftLeft.shiftLeft(signExtendedThing);
-        branchAddress = adder.add(Utils.parseSignedInt(shiftedLeftSignExtendedThing), PC.getPc());
-        newPcBeforeJump = (int) Long.parseLong(pcBranchMux.mux(Long.toBinaryString(PC.getPc()), branchAddress, beqAndGate),2);
-        betweenJRandJump = jrMux.mux(Integer.toBinaryString(newPcBeforeJump),readData1,jrFlag);
-        newPc = (int)Long.parseLong(pcBranchJumpMux.mux(betweenJRandJump,shiftedLeftJumpThing, jumpFlag),2);
+        shiftedLeftJumpThing.set(shiftLeft.shiftLeft(insruction25_0.get()));
+        shiftedLeftSignExtendedThing.set(shiftLeft.shiftLeft(signExtendedThing.get()));
+        branchAddress.set(adder.add(Utils.parseSignedInt(shiftedLeftSignExtendedThing.get()), PC.getPc()));
+        newPcBeforeJump = (int) Long.parseLong(pcBranchMux.mux(Long.toBinaryString(PC.getPc()), branchAddress.get(), beqAndGate),2);
+        betweenJRandJump.set(jrMux.mux(Integer.toBinaryString(newPcBeforeJump), readData1.get(), jrFlag));
+        newPc = (int)Long.parseLong(pcBranchJumpMux.mux(betweenJRandJump.get(), shiftedLeftJumpThing.get(), jumpFlag),2);
         PC.setPc(newPc);
 
-        registerWrite = regDstMux.mux(instruction20_16, instruction15_11,regDst);
-        registerWriteTany = regDstJalMux.mux(registerWrite,"11111",jalFlag);
-        regWriteData = memToRegMux.mux(aluResult,memRead,controlUnit.isMemToReg());
-        regWriteDataTany = jalMux.mux(regWriteData,Utils.to32BitBinary(pcIncremented),jalFlag);
-        registerFile.writeRegister(registerWriteTany,regWriteDataTany);
+        registerWrite.set(regDstMux.mux(instruction20_16.get(), instruction15_11.get(), regDst.get()));
+        registerWriteTany.set(regDstJalMux.mux(registerWrite.get(), "11111", jalFlag));
+        regWriteData.set(memToRegMux.mux(aluResult.get(), memRead.get(), controlUnit.isMemToReg()));
+        regWriteDataTany.set(jalMux.mux(regWriteData.get(), Utils.to32BitBinary(pcIncremented), jalFlag));
+        registerFile.writeRegister(registerWriteTany.get(), regWriteDataTany.get());
         registerFile.printRegisters();
 
-        System.out.println("Number of cycles : " + cycles);
+        controller.printStuff("Number of cycles : " + cycles );
         cycles++;
+    }
+
+
+
+
+    //==================================
+    //     GETTERS AND SETTERS
+    //==================================
+
+
+    public ALUControl getAluControl() {
+        return aluControl;
+    }
+
+    public Mux getShamtMux() {
+        return shamtMux;
+    }
+
+    public Mux getAluSrcMux() {
+        return aluSrcMux;
+    }
+
+    public Mux getMemToRegMux() {
+        return memToRegMux;
+    }
+
+    public Mux getPcBranchMux() {
+        return pcBranchMux;
+    }
+
+    public Mux getPcBranchJumpMux() {
+        return pcBranchJumpMux;
+    }
+
+    public Mux getRegDstMux() {
+        return regDstMux;
+    }
+
+    public Mux getRegDstJalMux() {
+        return regDstJalMux;
+    }
+
+    public Mux getJalMux() {
+        return jalMux;
+    }
+
+    public Mux getJrMux() {
+        return jrMux;
+    }
+
+    public ALU getAlu() {
+        return alu;
+    }
+
+    public Control getControlUnit() {
+        return controlUnit;
+    }
+
+    public RegisterFile getRegisterFile() {
+        return registerFile;
+    }
+
+    public Adder getAdder() {
+        return adder;
+    }
+
+    public ShiftLeft getShiftLeft() {
+        return shiftLeft;
+    }
+
+    public ShiftLeft getJumpShiftLeft() {
+        return jumpShiftLeft;
+    }
+
+    public PC getPc() {
+        return pc;
+    }
+
+    public DataMemory getDataMemory() {
+        return dataMemory;
+    }
+
+    public static int getCycles() {
+        return cycles;
+    }
+
+    public MemoryController getMemoryController() {
+        return memoryController;
+    }
+
+    public String getInstruction20_16() {
+        return instruction20_16.get();
+    }
+
+    public SimpleStringProperty instruction20_16Property() {
+        return instruction20_16;
+    }
+
+    public String getInstruction15_11() {
+        return instruction15_11.get();
+    }
+
+    public SimpleStringProperty instruction15_11Property() {
+        return instruction15_11;
+    }
+
+    public String getInstruction25_21() {
+        return instruction25_21.get();
+    }
+
+    public SimpleStringProperty instruction25_21Property() {
+        return instruction25_21;
+    }
+
+    public String getInstruction15_0() {
+        return instruction15_0.get();
+    }
+
+    public SimpleStringProperty instruction15_0Property() {
+        return instruction15_0;
+    }
+
+    public String getInsruction25_0() {
+        return insruction25_0.get();
+    }
+
+    public SimpleStringProperty insruction25_0Property() {
+        return insruction25_0;
+    }
+
+    public String getInstruction31_26() {
+        return instruction31_26.get();
+    }
+
+    public SimpleStringProperty instruction31_26Property() {
+        return instruction31_26;
+    }
+
+    public String getInstruction6_10() {
+        return instruction6_10.get();
+    }
+
+    public SimpleStringProperty instruction6_10Property() {
+        return instruction6_10;
+    }
+
+    public String getInstruction5_0() {
+        return instruction5_0.get();
+    }
+
+    public SimpleStringProperty instruction5_0Property() {
+        return instruction5_0;
+    }
+
+    public String getCurrentInstruction() {
+        return currentInstruction.get();
+    }
+
+    public SimpleStringProperty currentInstructionProperty() {
+        return currentInstruction;
+    }
+
+    public String getRegisterWrite() {
+        return registerWrite.get();
+    }
+
+    public SimpleStringProperty registerWriteProperty() {
+        return registerWrite;
+    }
+
+    public String getRegisterWriteTany() {
+        return registerWriteTany.get();
+    }
+
+    public SimpleStringProperty registerWriteTanyProperty() {
+        return registerWriteTany;
+    }
+
+    public boolean isRegDst() {
+        return regDst.get();
+    }
+
+    public BooleanProperty RegDstProperty(){
+        return regDst;
+    }
+
+    public String getReadData1() {
+        return readData1.get();
+    }
+
+    public SimpleStringProperty readData1Property() {
+        return readData1;
+    }
+
+    public String getReadData2noMux() {
+        return readData2noMux.get();
+    }
+
+    public SimpleStringProperty readData2noMuxProperty() {
+        return readData2noMux;
+    }
+
+    public String getSignExtendedThing() {
+        return signExtendedThing.get();
+    }
+
+    public SimpleStringProperty signExtendedThingProperty() {
+        return signExtendedThing;
+    }
+
+    public String getReadData2Tany() {
+        return readData2Tany.get();
+    }
+
+    public SimpleStringProperty readData2TanyProperty() {
+        return readData2Tany;
+    }
+
+    public String getReadData2() {
+        return readData2.get();
+    }
+
+    public SimpleStringProperty readData2Property() {
+        return readData2;
+    }
+
+    public String getAluCont() {
+        return aluCont.get();
+    }
+
+    public SimpleStringProperty aluContProperty() {
+        return aluCont;
+    }
+
+    public String getAluResult() {
+        return aluResult.get();
+    }
+
+    public SimpleStringProperty aluResultProperty() {
+        return aluResult;
+    }
+
+    public String getMemRead() {
+        return memRead.get();
+    }
+
+    public SimpleStringProperty memReadProperty() {
+        return memRead;
+    }
+
+    public String getRegWriteData() {
+        return regWriteData.get();
+    }
+
+    public SimpleStringProperty regWriteDataProperty() {
+        return regWriteData;
+    }
+
+    public String getRegWriteDataTany() {
+        return regWriteDataTany.get();
+    }
+
+    public SimpleStringProperty regWriteDataTanyProperty() {
+        return regWriteDataTany;
+    }
+
+    public boolean isZeroFlag() {
+        return zeroFlag;
+    }
+
+    public boolean isBeqAndGate() {
+        return beqAndGate;
+    }
+
+    public boolean isJumpFlag() {
+        return jumpFlag;
+    }
+
+    public boolean isJalFlag() {
+        return jalFlag;
+    }
+
+    public boolean isJrFlag() {
+        return jrFlag;
+    }
+
+    public boolean isShamtFlag() {
+        return shamtFlag;
+    }
+
+    public String getShiftedLeftJumpThing() {
+        return shiftedLeftJumpThing.get();
+    }
+
+    public SimpleStringProperty shiftedLeftJumpThingProperty() {
+        return shiftedLeftJumpThing;
+    }
+
+    public String getShiftedLeftSignExtendedThing() {
+        return shiftedLeftSignExtendedThing.get();
+    }
+
+    public SimpleStringProperty shiftedLeftSignExtendedThingProperty() {
+        return shiftedLeftSignExtendedThing;
+    }
+
+    public String getBranchAddress() {
+        return branchAddress.get();
+    }
+
+    public SimpleStringProperty branchAddressProperty() {
+        return branchAddress;
+    }
+
+    public int getNewPcBeforeJump() {
+        return newPcBeforeJump;
+    }
+
+    public int getNewPc() {
+        return newPc;
+    }
+
+    public int getPcIncremented() {
+        return pcIncremented;
+    }
+
+    public String getBetweenJRandJump() {
+        return betweenJRandJump.get();
+    }
+
+    public SimpleStringProperty betweenJRandJumpProperty() {
+        return betweenJRandJump;
+    }
+
+    public String getMemOp() {
+        return memOp;
     }
 }

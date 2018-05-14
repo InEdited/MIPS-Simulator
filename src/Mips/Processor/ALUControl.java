@@ -22,18 +22,32 @@ public class ALUControl {
         if(control.equals("100")){
             return "0111";
         }
+        //sltui
+        if(control.equals("110")){
+            return "1011";
+        }
+        //ori
+        if(control.equals("101")){
+            return "0001";
+        }
         if(control.equals("010")) {
             if (functionCode.equals("100000"))
                 return "0010";
+            //sub
             if (functionCode.equals("100010"))
                 return "0110";
+            //and
             if (functionCode.equals("100100"))
                 return "0000";
+            //or
             if (functionCode.equals("100101"))
                 return "0001";
             //slt
             if (functionCode.equals("101010"))
                 return "0111";
+            //sltu
+            if (functionCode.equals("101011"))
+                return "1011";
             //NOR
             if (functionCode.equals("100111"))
                 return "1000";

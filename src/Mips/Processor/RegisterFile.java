@@ -53,8 +53,12 @@ public class RegisterFile {
     }
 
     public void printRegisters() {
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i <32 ; i++) {
-            registers[i].printReg();
+            stringBuilder.append(registers[i].printReg());
+            stringBuilder.append("\n");
         }
+
+        processor.controller.registersData.setText(stringBuilder.toString());
     }
 }

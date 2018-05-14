@@ -194,6 +194,7 @@ public class Assembler {
         rInstructions.put("sll","000000");
         rInstructions.put("nor","100111");
         rInstructions.put("slt","101010");
+        rInstructions.put("sltu","101011");
 
         //Initializing I type Instructions
         iInstructions.put("addi","001000");
@@ -203,6 +204,7 @@ public class Assembler {
         iInstructions.put("lbu","100100");
         iInstructions.put("sb","101000");
         iInstructions.put("slti","001010");
+        iInstructions.put("sltui","001011");
         //iInstructions.put("","");
 
         //Initializing J type Instructions

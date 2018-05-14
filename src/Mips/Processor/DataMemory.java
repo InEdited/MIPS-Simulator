@@ -208,4 +208,8 @@ public class DataMemory {
     public void setMemOp(String memOp) {
         this.memOp = memOp;
     }
+
+    public HashMap<Long, String> getDataMemory() {
+        return dataMemory;
+    }
 }
