@@ -64,7 +64,7 @@ public class Register {
     }
 
     public String printReg(){
-        return   this.getName() + " ---> " + Utils.parseSignedLong(this.getValue());
+        return   this.getValue();
     }
 
 }

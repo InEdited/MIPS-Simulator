@@ -22,43 +22,43 @@ public class Processor {
     public MemoryController memoryController;
 
     //Instructions
-    private SimpleStringProperty instruction20_16 = new SimpleStringProperty(this, "instruction20_16");
-    private SimpleStringProperty instruction15_11 = new SimpleStringProperty(this, "instruction15_11");
-    private SimpleStringProperty instruction25_21 = new SimpleStringProperty(this, "instruction25_21");
-    private SimpleStringProperty instruction15_0 = new SimpleStringProperty(this, "instruction15_0");
-    private SimpleStringProperty insruction25_0 = new SimpleStringProperty(this, "insruction25_0");
-    private SimpleStringProperty instruction31_26 = new SimpleStringProperty(this, "instruction31_26");
-    private SimpleStringProperty instruction6_10 = new SimpleStringProperty(this, "instruction6_10");
-    private SimpleStringProperty instruction5_0 = new SimpleStringProperty(this, "instruction5_0");
+    private SimpleStringProperty instruction20_16;
+    private SimpleStringProperty instruction15_11;
+    private SimpleStringProperty instruction25_21;
+    private SimpleStringProperty instruction15_0;
+    private SimpleStringProperty insruction25_0;
+    private SimpleStringProperty instruction31_26;
+    private SimpleStringProperty instruction6_10;
+    private SimpleStringProperty instruction5_0;
 
     //Wires
-    private SimpleStringProperty currentInstruction = new SimpleStringProperty(this, "currentInstruction");
-    private SimpleStringProperty registerWrite = new SimpleStringProperty(this, "registerWrite");
-    private SimpleStringProperty registerWriteTany = new SimpleStringProperty(this, "registerWriteTany");
-    private BooleanProperty regDst = new SimpleBooleanProperty();
-    private SimpleStringProperty readData1 = new SimpleStringProperty(this, "readData1");
-    private SimpleStringProperty readData2noMux = new SimpleStringProperty(this, "readData2noMux");
-    private SimpleStringProperty signExtendedThing = new SimpleStringProperty(this, "signExtendedThing");
-    private SimpleStringProperty readData2Tany = new SimpleStringProperty(this, "readData2Tany");
-    private SimpleStringProperty readData2 = new SimpleStringProperty(this, "readData2");
-    private SimpleStringProperty aluCont = new SimpleStringProperty(this, "aluCont");
-    private SimpleStringProperty aluResult = new SimpleStringProperty(this, "aluResult");
-    private SimpleStringProperty memRead = new SimpleStringProperty(this, "memRead");
-    private SimpleStringProperty regWriteData = new SimpleStringProperty(this, "regWriteData");
-    private SimpleStringProperty regWriteDataTany = new SimpleStringProperty(this, "regWriteDataTany");
+    private SimpleStringProperty currentInstruction;
+    private SimpleStringProperty registerWrite;
+    private SimpleStringProperty registerWriteTany;
+    private BooleanProperty regDst;
+    private SimpleStringProperty readData1;
+    private SimpleStringProperty readData2noMux;
+    private SimpleStringProperty signExtendedThing;
+    private SimpleStringProperty readData2Tany;
+    private SimpleStringProperty readData2;
+    private SimpleStringProperty aluCont;
+    private SimpleStringProperty aluResult;
+    private SimpleStringProperty memRead;
+    private SimpleStringProperty regWriteData;
+    private SimpleStringProperty regWriteDataTany;
     private boolean zeroFlag;
     private boolean beqAndGate;
     boolean jumpFlag;
     private boolean jalFlag;
     private boolean jrFlag;
     private boolean shamtFlag;
-    private SimpleStringProperty shiftedLeftJumpThing = new SimpleStringProperty(this, "shiftedLeftJumpThing");
-    private SimpleStringProperty shiftedLeftSignExtendedThing = new SimpleStringProperty(this, "shiftedLeftSignExtendedThing");
-    private SimpleStringProperty branchAddress = new SimpleStringProperty(this, "branchAddress");
+    private SimpleStringProperty shiftedLeftJumpThing;
+    private SimpleStringProperty shiftedLeftSignExtendedThing;
+    private SimpleStringProperty branchAddress;
     private int newPcBeforeJump;
     private int newPc;
     private int pcIncremented;
-    private SimpleStringProperty betweenJRandJump = new SimpleStringProperty(this, "betweenJRandJump");
+    private SimpleStringProperty betweenJRandJump;
      String memOp;
 
 
@@ -87,6 +87,32 @@ public class Processor {
         dataMemory = new DataMemory(this);
         memoryController = new MemoryController();
 
+        instruction20_16 = new SimpleStringProperty(this, "instruction20_16");
+        instruction15_11 = new SimpleStringProperty(this, "instruction15_11");
+        instruction25_21 = new SimpleStringProperty(this, "instruction25_21");
+        instruction15_0 = new SimpleStringProperty(this, "instruction15_0");
+        insruction25_0 = new SimpleStringProperty(this, "insruction25_0");
+        instruction31_26 = new SimpleStringProperty(this, "instruction31_26");
+        instruction6_10 = new SimpleStringProperty(this, "instruction6_10");
+        instruction5_0 = new SimpleStringProperty(this, "instruction5_0");
+        currentInstruction = new SimpleStringProperty(this, "currentInstruction");
+        registerWrite = new SimpleStringProperty(this, "registerWrite");
+        registerWriteTany = new SimpleStringProperty(this, "registerWriteTany");
+        regDst = new SimpleBooleanProperty();
+        readData1 = new SimpleStringProperty(this, "readData1");
+        readData2noMux = new SimpleStringProperty(this, "readData2noMux");
+        signExtendedThing = new SimpleStringProperty(this, "signExtendedThing");
+        readData2Tany = new SimpleStringProperty(this, "readData2Tany");
+        readData2 = new SimpleStringProperty(this, "readData2");
+        aluCont = new SimpleStringProperty(this, "aluCont");
+        aluResult = new SimpleStringProperty(this, "aluResult");
+        memRead = new SimpleStringProperty(this, "memRead");
+        regWriteData = new SimpleStringProperty(this, "regWriteData");
+        regWriteDataTany = new SimpleStringProperty(this, "regWriteDataTany");
+        shiftedLeftJumpThing = new SimpleStringProperty(this, "shiftedLeftJumpThing");
+        shiftedLeftSignExtendedThing = new SimpleStringProperty(this, "shiftedLeftSignExtendedThing");
+        branchAddress = new SimpleStringProperty(this, "branchAddress");
+        betweenJRandJump = new SimpleStringProperty(this, "betweenJRandJump");
     }
 
     public void stepOne(){
@@ -130,10 +156,13 @@ public class Processor {
         dataMemory.memWrite(Long.parseLong(aluResult.get(),2), readData2noMux.get());
         memRead.set(dataMemory.memRead(Utils.parseSignedLong(aluResult.get())));
         zeroFlag = alu.zeroFlag;
-        if(zeroFlag && controlUnit.isBranch())
+        if(zeroFlag && controlUnit.isBranch()) {
             beqAndGate = true;
-        else
+        }
+        else{
             beqAndGate = false;
+        }
+
         shiftedLeftJumpThing.set(shiftLeft.shiftLeft(insruction25_0.get()));
         shiftedLeftSignExtendedThing.set(shiftLeft.shiftLeft(signExtendedThing.get()));
         branchAddress.set(adder.add(Utils.parseSignedInt(shiftedLeftSignExtendedThing.get()), PC.getPc()));

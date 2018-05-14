@@ -120,19 +120,52 @@ public class  Controller implements Initializable {
            stopProgram();
        }
        catch (Exception e){
+           System.out.println(e.fillInStackTrace());
            printStuff("Exception happened please check your assembly code");
+           stopProgram();
        }
 
         //processor.registerFile.printRegisters();
     }
 
+/*
     @FXML
     private void updateToolTips() {
+        updateControlUnitToolTip();
+        updateAluToolTip();
+        updatePcToolTip();
+        updateDataMemoryToolTip();
+        updateInstructionMemoryToolTip();
+    }
+*/
+    @FXML
+    private void updateControlUnitToolTip() {
         controlUnitData.setText(controlUnitData());
+    }
+
+    @FXML
+    private void updateAluToolTip() {
         aluData.setText(String.valueOf(processor.alu.ALUResult));
+    }
+
+    @FXML
+    private void updatePcToolTip() {
         pcData.setText(String.valueOf(PC.getPc()));
-        dataMemoryData.setText(String.valueOf(processor.dataMemory.getDataMemory()));
-        instructionMemoryData.setText(InstructionMemory.getInstructionAt(PC.getPc()));
+    }
+
+    @FXML
+    private void updateDataMemoryToolTip() {
+        StringBuilder hopa = new StringBuilder();
+        for (Map.Entry entry:processor.dataMemory.getDataMemory().entrySet()) {
+            hopa.append(entry.toString()+"\n");
+
+        }
+        dataMemoryData.setText(hopa.toString());
+    }
+
+    @FXML
+    private void updateInstructionMemoryToolTip() {
+        instructionMemoryData.setText(InstructionMemory.getInstructionStringAt(PC.getPc()));
     }
 
     @FXML
@@ -157,7 +190,12 @@ public class  Controller implements Initializable {
             startAddress = startingAddress.getText();
 
         Assembler.Assemble(assembly, Integer.parseInt(startAddress));
-        PC.setPc(startingAddress.getText().isEmpty()?1000:Integer.parseInt(startingAddress.getText()));
+        if (startingAddress.getText().isEmpty()){
+            PC.setPc(1000);
+        }
+        else{
+            PC.setPc(Integer.parseInt(startingAddress.getText()));
+        }
         processor.registerFile = new RegisterFile(processor);
         stepButton.setDisable(false);
         startButton.setDisable(false);
@@ -211,7 +249,7 @@ public class  Controller implements Initializable {
         speedLabel.setText(String.valueOf((int)speedSlider.getValue()));
         int speed = (int)speedSlider.getValue();
         if(speed == 100) {
-            delay = 1;
+            delay = 25;
             period = 5;
         }
         else {

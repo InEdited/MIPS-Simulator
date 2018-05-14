@@ -19,6 +19,15 @@ public class InstructionMemory {
         //                    "At : " +address);
         return instructions.get(address);
     }
+    public static String getInstructionStringAt(int address) {
+        if (instructions.get(address) == null){
+            System.out.println("Error : address doesnt exist or has no data ");
+            return "";
+        }
+        //System.out.println("Getting instruction : " + instructionsString.get(address) +
+        //                    "At : " +address);
+        return "Instruction : " + instructionsString.get(address) + "\n Binary : " + instructions.get(address);
+    }
 
     public static void setInstruction(int address,String instruction,String instructionString) {
         //System.out.println("Putting instruction in memory : " + instruction + "At address : " + address);

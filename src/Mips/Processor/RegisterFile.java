@@ -1,5 +1,7 @@
 package Mips.Processor;
 
+import Mips.Utils.Utils;
+
 public class RegisterFile {
     private static Register[] registers = new Register[32];
 
@@ -55,7 +57,13 @@ public class RegisterFile {
     public void printRegisters() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i <32 ; i++) {
+            stringBuilder.append(registers[i].getName());
+            stringBuilder.append(" ---> ");
             stringBuilder.append(registers[i].printReg());
+            stringBuilder.append(" --Hex--> ");
+            stringBuilder.append(Long.toHexString(Utils.parseSignedLong(registers[i].printReg())));
+            stringBuilder.append(" --Dec--> ");
+            stringBuilder.append(Utils.parseSignedLong(registers[i].printReg()));
             stringBuilder.append("\n");
         }
 
