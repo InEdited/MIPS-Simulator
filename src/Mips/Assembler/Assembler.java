@@ -32,7 +32,8 @@ public class Assembler {
         BufferedReader bufReader = new BufferedReader(new StringReader(codeUpdated));
         String codeLine = null;
         while((codeLine=bufReader.readLine())!=null){
-            String[] splittedCode = codeLine.trim().split("\\s+");
+
+            String[] splittedCode = codeLine.trim().replaceAll("\\x23.*","").split("\\s+");
             for (String thing: splittedCode){
                 System.out.println(thing);
             }
