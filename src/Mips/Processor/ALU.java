@@ -5,6 +5,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 
 
+
+
 public class ALU {
     public Boolean zeroFlag = false;
     public long ALUResult;
@@ -26,6 +28,10 @@ public class ALU {
         //or
         if(controlSignal.equals("0001"))
             ALUResult =  Utils.parseSignedLong(firstValue) | Utils.parseSignedLong(secondValue);
+        //mul
+        if(controlSignal.equals("1110"))
+            ALUResult = Long.parseLong(firstValue,2) * Long.parseLong(secondValue,2);
+
         //slt
         if(controlSignal.equals("0111")){
             if(Utils.parseSignedLong(firstValue)<Utils.parseSignedLong(secondValue)){

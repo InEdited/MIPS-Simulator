@@ -196,6 +196,7 @@ public class Assembler {
         rInstructions.put("nor","100111");
         rInstructions.put("slt","101010");
         rInstructions.put("sltu","101011");
+        rInstructions.put("mul","011000");
 
         //Initializing I type Instructions
         iInstructions.put("addi","001000");

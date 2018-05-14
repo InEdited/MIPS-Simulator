@@ -52,6 +52,10 @@ public class ALUControl {
             if (functionCode.equals("100111"))
                 return "1000";
 
+            //mul
+            if(functionCode.equals("011000"))
+                return "1110";
+
             //jr
             if (functionCode.equals("001000")) {
                 JR.set(true);
